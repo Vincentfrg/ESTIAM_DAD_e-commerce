@@ -1,14 +1,22 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Dashboard from "../views/Dashboard.vue";
+import AppLayout from "../components/AppLayout.vue";
 import Login from "../views/Login.vue";
+import Dashboard from "../views/Dashboard.vue";
 import RequestPassword from "../views/RequestPasswordReset.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 
 const routes = [
     {
-        path: "/dashboard",
-        name: "dashboard",
-        component: Dashboard,
+        path: "/app",
+        name: "app",
+        component: AppLayout,
+        children: [
+            {
+                path: "dashboard",
+                name: "app.dashboard",
+                component: Dashboard,
+            },
+        ]
     },
     {
         path: "/login",
