@@ -1,42 +1,33 @@
 <template>
     <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img class="mx-auto h-20 w-auto rounded-full size-max" src="../assets/la-dushe-logo.jpg" alt="Your Company" />
+            <img class="mx-auto h-20 w-auto rounded-full size-max" src="../assets/la-dushe-logo.jpg"
+                alt="Your Company" />
             <h2 class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                Connexion à votre compte 👏
+                Créér un nouveau mot de passe 🔒
             </h2>
         </div>
 
         <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST">
                 <div>
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Adresse E-mail</label>
+                    <label for="new-password" class="block text-sm font-medium leading-6 text-gray-900">Nouveau -
+                        Mot de passe</label>
                     <div class="mt-2">
-                        <input id="email" name="email" type="email" autocomplete="email" required=""
+                        <input id="new-password" name="password" type="password" required=""
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de
-                            passe</label>
-                        <div class="text-sm">
-                            <router-link :to="{ name: 'requestPassword' }"
-                                class="font-semibold text-indigo-600 hover:text-indigo-500">Mot de passe oublié
-                                ?</router-link>
-                        </div>
+                        <label for="password-repeat" class="block text-sm font-medium leading-6 text-gray-900">Confirmer
+                            - Mot de passe</label>
                     </div>
                     <div class="mt-2">
-                        <input id="password" name="password" type="password" autocomplete="current-password" required=""
+                        <input id="password-repeat" name="password_repeat" type="password" required=""
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
-                </div>
-
-                <div class="flex items-center">
-                    <input id="remember-me" name="remember-me" type="checkbox"
-                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">Se rappeler de moi</label>
                 </div>
 
                 <div>
@@ -46,15 +37,15 @@
                             <LockClosedIcon class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                                 aria-hidden="true" />
                         </span>
-                        Se connecter
+                        Continuer
                     </button>
                 </div>
             </form>
 
             <p class="mt-4 text-center text-sm text-gray-500">
-                Vous n'avez pas de compte ?
-                {{ " " }}
-                <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Inscription</a>
+                Vous aviez retrouvé votre mot de passe ?
+                <router-link :to="{ name: 'login' }"
+                    class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Connexion</router-link>
             </p>
         </div>
     </div>
