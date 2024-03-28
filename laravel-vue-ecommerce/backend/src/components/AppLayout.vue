@@ -1,10 +1,8 @@
 <template>
     <div class="min-h-full flex">
-        <Sidebar/>
+        <Sidebar />
         <div class="flex-1">
-            <header class="h-8 shadow bg-white">
-                Header
-            </header>
+            <header class="h-8 shadow bg-white">Header</header>
             <!-- Content -->
             <main>
                 <router-view></router-view>
@@ -17,7 +15,7 @@
 <script setup>
 import Sidebar from "./Sidebar.vue";
 const { title } = defineProps({
-    title: String
+    title: String,
 });
 
 // import { LockClosedIcon } from "@heroicons/vue/solid";
