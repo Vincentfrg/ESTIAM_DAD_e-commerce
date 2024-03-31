@@ -1,12 +1,13 @@
 <template>
     <GuestLayout title="Connexion à votre compte 👏">
-        <form class="space-y-6" action="#" method="POST">
+        <form class="space-y-6" method="POST" @submit.prevent="login">
             <input type="hidden" name="remember" value="true" />
             <div>
                 <label for="email-address" class="block text-sm font-medium leading-6 text-gray-900">Adresse
                     E-mail</label>
                 <div class="mt-2">
                     <input id="email-address" name="email" type="email" autocomplete="email" required=""
+                        v-model="user.email"
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                 </div>
             </div>
@@ -22,12 +23,13 @@
                 </div>
                 <div class="mt-2">
                     <input id="password" name="password" type="password" autocomplete="current-password" required=""
+                        v-model="user.password"
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                 </div>
             </div>
 
             <div class="flex items-center">
-                <input id="remember-me" name="remember-me" type="checkbox"
+                <input id="remember-me" name="remember-me" type="checkbox" v-model="user.remember"
                     class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
                 <label for="remember-me" class="ml-2 block text-sm text-gray-900">Se rappeler de moi</label>
             </div>
@@ -53,6 +55,31 @@
 
 
 <script setup>
+import { ref } from 'vue';
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import GuestLayout from "../components/GuestLayout.vue";
+import store from '../store';
+import router from '../router';
+
+let loading = ref(false);
+let errorMsg = ref("");
+
+const user = {
+    email: '',
+    password: '',
+    remember: false,
+}
+
+function login() {
+    loading.value = true;
+    store.dispatch('login', user)
+        .then(() => {
+            loading.value = false;
+            router.push({ name: 'app.dashboard' })
+        })
+        .catch(({ response }) => {
+            loading.value = false;
+            errorMsg.value = response.data.message;
+        })
+}
 </script>

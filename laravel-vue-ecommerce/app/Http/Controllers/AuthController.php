@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        if (!user->is_admin) {
+        if (!$user->is_admin) {
             Auth::logout();
 
             return response([
@@ -40,12 +40,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout() {
+    public function logout()
+    {
         /** @var \App\Models\User $user  */
         $user = Auth::user();
         $user->currentAccessToken()->delete();
 
         return response('', 204);
     }
-
 }

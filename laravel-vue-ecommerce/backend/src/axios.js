@@ -20,7 +20,7 @@ axiosClient.interceptors.response.use(
             sessionStorage.removeItem("TOKEN");
             router.push({ name: "login" });
         }
-        throw error;
+        console.error(error);
     }
 );
 
