@@ -8,7 +8,7 @@
     <div class="bg-white p-4 rounded-lg shadow">
         <div class="flex justify-between border-b-2 pb-3">
             <div class="flex items-center">
-                <span class="whitespace-nowrap mr-3">Par Page</span>
+                <span class="whitespace-nowrap mr-3">Produits/Page :</span>
                 <select @change="getProducts(null)" v-model="perPage" class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -96,7 +96,11 @@ onMounted(() => {
 });
 
 function getProducts(url = null) {
-    store.dispatch('getProducts', {url});
+    store.dispatch('getProducts', {
+        url,
+        search: search.value,
+        perPage: perPage.value,
+    });
 }
 
 function getForPage(ev, link) {
