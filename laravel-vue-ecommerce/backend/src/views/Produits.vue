@@ -21,7 +21,7 @@
                 <input v-model="search" @change="getProducts(null)" class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Rechercher un produit...">
             </div>
         </div>
-        <Spinner v-if="products.loading"/>
+        <Spinner v-if="products.loading" class="mt-4"/>
         <template v-else>
             <table class="table-auto w-full">
                 <thead>
@@ -54,8 +54,23 @@
 </template>
 
 <script setup>
+import {ref, computed, onMounted} from "vue";
+import store from "../store";
 import Spinner from '../components/core/Spinner.vue';
+import {PRODUITS_PAR_PAGE} from '../constants.js';
 
+
+const perPage = ref(PRODUITS_PAR_PAGE);
+const search = ref('');
+const products = computed(() => store.state.products);
+
+onMounted(() => {
+    getProducts();
+});
+
+function getProducts() {
+    store.dispatch('getProducts');
+}
 
 </script>
 
