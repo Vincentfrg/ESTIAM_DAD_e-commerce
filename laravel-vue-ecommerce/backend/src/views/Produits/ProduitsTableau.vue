@@ -1,11 +1,4 @@
 <template>
-    <div class="flex items-center justify-between mb-3">
-        <h1 class="text-3xl font-semibold">Produits</h1>
-        <button type="submit"
-            class="flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Ajouter un nouveau Produit
-        </button>
-    </div>
     <div class="bg-white p-4 rounded-lg shadow">
         <div class="flex justify-between border-b-2 pb-3">
             <div class="flex items-center">
@@ -92,10 +85,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import store from "../store";
-import Spinner from '../components/core/Spinner.vue';
-import { PRODUITS_PAR_PAGE } from '../constants.js';
-import TableauHeaderCell from '../components/core/Tableau/TableauHeaderCell.vue';
+import store from "../../store";
+import Spinner from '../../components/core/Spinner.vue';
+import { PRODUITS_PAR_PAGE } from '../../constants.js';
+import TableauHeaderCell from '../../components/core/Tableau/TableauHeaderCell.vue';
 
 
 const perPage = ref(PRODUITS_PAR_PAGE);
