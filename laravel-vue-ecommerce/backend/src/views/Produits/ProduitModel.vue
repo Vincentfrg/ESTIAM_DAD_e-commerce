@@ -17,7 +17,7 @@
                                 class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center" />
                             <header class="py-3 px-4 flex justify-between items-center">
                                 <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                                    {{ product.id ? `Update product: "${props.product.title}"` : 'Créer un nouveau produit'}}
+                                    {{ product.id ? `Modifier le produit: "${props.product.title}"` : 'Créer un nouveau produit'}}
                                 </DialogTitle>
                                 <button
                                     @click="closeModal()"
