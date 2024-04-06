@@ -3,7 +3,7 @@
         <Dialog as="div" @close="closeModal" class="relative z-10">
             <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
                 leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
-                <div class="fixed inset-0 bg-black/25" />
+                <div class="fixed inset-0 bg-black opacity-75" />
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
@@ -12,7 +12,7 @@
                         enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
                         leave-to="opacity-0 scale-95">
                         <DialogPanel
-                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                             <Spinner v-if="loading"
                                 class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center" />
                             <header class="py-3 px-4 flex justify-between items-center">
@@ -47,31 +47,17 @@
                                 </div>
                                 <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                     <button type="submit"
-                                            class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">
                                     Envoyer
                                     </button>
                                     <button type="button"
-                                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white"
-                                        @click="closeModal" ref="cancelButtonRef">
-                                    Annuler
+                                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                            @click="closeModal"
+                                            ref="cancelButtonRef">
+                                        Annuler
                                     </button>
                                 </footer>
                             </form>
-
-                            <!-- <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    Your payment has been successfully submitted. We’ve sent you
-                                    an email with all of the details of your order.
-                                </p>
-                            </div> -->
-
-                            <!-- <div class="mt-4">
-                                <button type="button"
-                                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    @click="closeModal">
-                                    Got it, thanks!
-                                </button>
-                            </div> -->
                         </DialogPanel>
                     </TransitionChild>
                 </div>
@@ -81,16 +67,18 @@
 </template>
 
 <script setup>
-import { computed, ref, onUpdated } from 'vue'
+import { computed, ref, onUpdated } from 'vue';
 import {
     TransitionRoot,
     TransitionChild,
     Dialog,
     DialogPanel,
     DialogTitle,
-} from '@headlessui/vue'
-import Spinner from 'backend/src/components/core/Spinner.vue';
-import store from 'backend/src/store';
+} from '@headlessui/vue';
+
+import Spinner from '../../components/core/Spinner.vue';
+import store from '../../store/index';
+import CustomInput from '../../components/core/CustomInput.vue';
 
 
 
