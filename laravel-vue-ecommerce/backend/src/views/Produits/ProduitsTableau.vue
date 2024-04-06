@@ -48,7 +48,7 @@
                 <tr v-for="product of products.data">
                     <td class="border-b p-2">{{ product.id }}</td>
                     <td class="border-b p-2">
-                        <img class="w-16" :src="product.image" :alt="product.title">
+                        <img class="w-16" :src="product.image_url" :alt="product.title">
                     </td>
                     <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
                     product.title }}</td>
@@ -81,6 +81,7 @@
                                                 :class="[
                                                     active ? 'bg-indigo-600 text-white' : 'text-gray-900', 'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                                                 ]"
+                                                @click="editProduct(product)"
                                             >
                                                 <PencilIcon
                                                     :active="active"
@@ -153,6 +154,7 @@ const search = ref('');
 const products = computed(() => store.state.products);
 const sortField = ref('updated_at');
 const sortDirection = ref('desc');
+const emit = defineEmits(['click'])
 
 onMounted(() => {
     getProducts();
@@ -187,6 +189,10 @@ function sortProduct(field) {
         sortDirection.value = 'asc'
     }
     getProducts();
+}
+
+function editProduct(product) {
+    emit('clickEdit', product)
 }
 
 function deleteProduct(product) {
