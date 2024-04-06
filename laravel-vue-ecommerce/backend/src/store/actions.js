@@ -23,7 +23,7 @@ export function logout({ commit }) {
     });
 }
 
-export function getProducts({commit}, {url = null, search = '', perPage = 10, sort_field, sort_direction}) {
+export function getProducts({commit}, {url = null, search = '', perPage = 10, sort_field, sort_direction} = {}) {
     commit('setProducts', [true])
     url = url || '/products';
     return axiosClient.get(url, {
@@ -68,5 +68,9 @@ export function updateProduct({commit}, product) {
     } else {
         product._method = 'PUT'
     }
-    return axiosClient.post(`/produits/${id}`, product);
+    return axiosClient.post(`/products/${id}`, product);
+}
+
+export function deleteProduct({commit}, id) {
+    return axiosClient.delete(`/products/${id}`)
 }
