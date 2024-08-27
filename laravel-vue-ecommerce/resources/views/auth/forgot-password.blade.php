@@ -5,15 +5,15 @@
             Mot de passe oublié ? 🥺
         </h2>
         <p class="text-center text-gray-500 mb-6">
-            ou
-            <a href="{{route('login')}}" class="text-purple-600 hover:text-purple-500">retour à la page de connexion</a>.
+        Vous voulez vous connecter ?
+            <a href="{{route('login')}}" class="text-purple-600 hover:text-purple-500">Connexion</a>.
         </p>
 
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <div class="mb-3">
-            <x-input id="loginEmail" type="email" name="email" :value="old('email')" placeholder="Votre adresse mail" required autofocus />
+            <x-input id="loginEmail" type="email" name="email" :value="old('email')" placeholder="Adresse e-mail*" required autofocus />
         </div>
         <div class="mb-4 text-gray-600 dark:text-gray-400 text-xs text-center">
             {{ __('Saisissez votre adresse e-mail et nous vous enverrons des instructions pour réinitialiser votre mot de passe.') }}

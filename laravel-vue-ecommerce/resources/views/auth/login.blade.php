@@ -6,17 +6,17 @@
             Connexion à votre compte 👏
         </h2>
         <p class="text-center text-gray-500 mb-6">
-            ou
-            <a href="{{route('register')}}" class="text-sm text-purple-700 hover:text-purple-600">créer un nouveau compte</a>
+            Vous n'avez pas de compte ?
+            <a href="{{route('register')}}" class="text-sm text-purple-700 hover:text-purple-600">Inscription</a>
         </p>
 
-        <x-auth-validation-errors class="mb-4" :errors="$errors"/>
+        <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
         <div class="mb-4">
-            <x-input id="loginEmail" type="email" name="email" :value="old('email')" :errors="$errors" placeholder="Votre adresse mail" />
+            <x-input id="loginEmail" type="email" name="email" :value="old('email')" :errors="$errors" placeholder="Adresse e-mail*" />
         </div>
         <div class="mb-4">
-            <x-input id="loginPassword" type="password" name="password" placeholder="Votre mot de passe" required autocomplete="current-password"/>
+            <x-input id="loginPassword" type="password" name="password" placeholder="Mot de passe*" required autocomplete="current-password" />
         </div>
 
         <div class="flex justify-between items-center mb-5">
