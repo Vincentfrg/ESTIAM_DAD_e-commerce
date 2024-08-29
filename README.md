@@ -4,7 +4,7 @@
 
 ## Informations importantes :
 
-<i>Dans le terminal :</i>
+<i>Pour commencer, dans le terminal :</i>
 
 - Lancer le serveur <b>Laravel</b> (pour l'utilisation API Axios) dans la racine du projet `/laravel-vue-ecommerce` avec cette commande `php artisan serve` et lancer `npm run dev`.
 - Lancer le serveur <b>Vue.js</b> (pour acceder au site) à partir du dossier `/backend` de la racine parent `/laravel-vue-ecommerce` avec cette commande `npm run dev`.

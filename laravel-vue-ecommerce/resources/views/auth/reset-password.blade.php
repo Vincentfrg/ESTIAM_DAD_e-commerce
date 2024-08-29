@@ -3,6 +3,8 @@
         <h2 class="text-2xl font-semibold text-center mb-5">
             Entrez votre nouveau Mot de Passe
         </h2>
+        <!-- Session Status -->
+         <x-auth-session-status class="mb-4" :status="session('status')"/>
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
