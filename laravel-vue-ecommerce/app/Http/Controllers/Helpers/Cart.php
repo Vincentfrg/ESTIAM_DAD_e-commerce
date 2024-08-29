@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Helpers;
+namespace App\Http\Controllers\Helpers;
 use App\Models\CartItem;
 
 
@@ -46,7 +46,7 @@ class Cart
     {
         return array_reduce(
             $cartItems,
-            fn($carry, $items) => $carry + $items['quantity'],
+            fn($carry, $item) => $carry + $item['quantity'],
             0
         );
     }
