@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Helpers;
+namespace App\Helpers;
+
 use App\Models\CartItem;
+use App\Models\Product;
+use Illuminate\Support\Arr;
 
 
 class Cart
@@ -72,5 +75,15 @@ class Cart
                 CartItem::insert($newCartItems);
             }
         }
+    }
+
+    public static function getProductsAndCartItems(): array|\Illuminate\Database\Eloquent\Collection
+    {
+        $cartItems = self::getCartItems();
+        $ids = Arr::pluck($cartItems, 'product_id');
+        $products = Product::query()->whereIn('id', $ids)->get();
+        $cartItems = Arr::keyBy($cartItems, 'product_id');
+
+        return [$products, $cartItems];
     }
 }
