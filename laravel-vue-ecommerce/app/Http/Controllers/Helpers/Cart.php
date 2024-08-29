@@ -1,7 +1,8 @@
 <?php
 
+namespace App\Http\Helpers;
 use App\Models\CartItem;
-use function PHPSTORM_META\map;
+
 
 class Cart
 {
@@ -17,7 +18,7 @@ class Cart
             return array_reduce(
                 $cartItems,
                 fn($carry, $item) => $carry + $item['quantity'],
-                initial: 0
+                0
             );
         };
     }
@@ -46,7 +47,7 @@ class Cart
         return array_reduce(
             $cartItems,
             fn($carry, $items) => $carry + $items['quantity'],
-            initial: 0
+            0
         );
     }
 
