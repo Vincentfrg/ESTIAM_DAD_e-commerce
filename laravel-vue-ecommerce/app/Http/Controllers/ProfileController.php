@@ -11,50 +11,54 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function view(Request $request)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return view('profile.view');
     }
+    // /**
+    //  * Display the user's profile form.
+    //  */
+    // public function edit(Request $request): View
+    // {
+    //     return view('profile.edit', [
+    //         'user' => $request->user(),
+    //     ]);
+    // }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+    // /**
+    //  * Update the user's profile information.
+    //  */
+    // public function update(ProfileUpdateRequest $request): RedirectResponse
+    // {
+    //     $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+    //     if ($request->user()->isDirty('email')) {
+    //         $request->user()->email_verified_at = null;
+    //     }
 
-        $request->user()->save();
+    //     $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
+    //     return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    // }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+    // /**
+    //  * Delete the user's account.
+    //  */
+    // public function destroy(Request $request): RedirectResponse
+    // {
+    //     $request->validateWithBag('userDeletion', [
+    //         'password' => ['required', 'current_password'],
+    //     ]);
 
-        $user = $request->user();
+    //     $user = $request->user();
 
-        Auth::logout();
+    //     Auth::logout();
 
-        $user->delete();
+    //     $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
 
-        return Redirect::to('/');
-    }
+    //     return Redirect::to('/');
+    // }
 }
