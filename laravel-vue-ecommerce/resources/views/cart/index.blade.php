@@ -1,6 +1,6 @@
 <x-app-layout>
-<div class="container lg:w-2/3 xl:w-2/3 mx-auto">
-        <h1 class="text-3xl font-bold mb-6">Your Cart Items</h1>
+    <div class="container lg:w-2/3 xl:w-2/3 mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Votre panier (invité)</h1>
 
         <div x-data="{
             cartItems: {{
@@ -31,8 +31,8 @@
                             <div
                                 class="w-full flex flex-col sm:flex-row items-center gap-4 flex-1">
                                 <a :href="product.href"
-                                   class="w-36 h-32 flex items-center justify-center overflow-hidden">
-                                    <img :src="product.image" class="object-cover" alt=""/>
+                                    class="w-36 h-32 flex items-center justify-center overflow-hidden">
+                                    <img :src="product.image" class="object-cover" alt="" />
                                 </a>
                                 <div class="flex flex-col justify-between flex-1">
                                     <div class="flex justify-between mb-3">
@@ -43,50 +43,47 @@
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <div class="flex items-center">
-                                            Qty:
+                                            Quantité:
                                             <input
                                                 type="number"
                                                 min="1"
                                                 x-model="product.quantity"
                                                 @change="changeQuantity()"
-                                                class="ml-3 py-1 border-gray-200 focus:border-purple-600 focus:ring-purple-600 w-16"
-                                            />
+                                                class="ml-3 py-1 border-gray-200 focus:border-purple-600 focus:ring-purple-600 w-16" />
                                         </div>
                                         <a
                                             href="#"
                                             @click.prevent="removeItemFromCart()"
-                                            class="text-purple-600 hover:text-purple-500"
-                                        >Remove</a
-                                        >
+                                            class="text-purple-600 hover:text-purple-500">Supprimer</a>
                                     </div>
                                 </div>
                             </div>
                             <!--/ Product Item -->
-                            <hr class="my-5"/>
+                            <hr class="my-5" />
                         </div>
                     </template>
                     <!-- Product Item -->
 
-            <div class="border-t border-gray-300 pt-4">
-                <div class="flex justify-between">
-                    <span class="font-semibold">Subtotal</span>
-                    <span class="text-xl" x-text="`$${cartTotal}`"></span>
-                </div>
-                <p class="text-gray-500 mb-6">
-                    Shipping and taxes calculated at checkout.
-                </p>
+                    <div class="border-t border-gray-300 pt-4">
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Total</span>
+                            <span id="cartTotal" class="text-xl" x-text="`$${cartTotal}`"></span>
+                        </div>
+                        <p class="text-gray-500 mb-6">
+                            Les frais de port et les taxes seront calculés a l'étape du paiement.
+                        </p>
 
-                <button type="submit" class="btn-primary w-full py-3 text-lg">
-                    Proceed to Checkout
-                </button>
-                </template>
-                <template x-if="!cartItems.length">
-                    <div class="text-center py-8 text-gray-500">
-                        Vous n'avez aucun produit dans le panier.
-                    </div>
-                </template>
-            </div>
+                        <button type="submit" class="btn-primary w-full py-3 text-lg">
+                            Procédé au paiement
+                        </button>
+            </template>
+            <template x-if="!cartItems.length">
+                <div class="text-center py-8 text-gray-500">
+                    Vous n'avez aucun produit dans le panier.
+                </div>
+            </template>
         </div>
-        </div>
+    </div>
+    </div>
     </main>
 </x-app-layout>

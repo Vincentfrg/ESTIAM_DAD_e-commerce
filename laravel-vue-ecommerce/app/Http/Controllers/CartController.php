@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 
-
-
 class CartController extends Controller
 {
     public function index()
@@ -55,10 +53,10 @@ class CartController extends Controller
 
         if ($product->quantity !== null && $product->quantity < $totalQuantity) {
             return response([
-                'message' => match ($product->quantity) {
-                    0 => 'Le produit est en rupture de stock',
-                    1 => 'Il ne reste plus qu\'un seul article',
-                    default => 'Il n\'y a que ' . $product->quantity . ' éléments restants'
+                'message' => match ( $product->quantity ) {
+                    0 => 'The product is out of stock',
+                    1 => 'There is only one item left',
+                    default => 'There are only ' . $product->quantity . ' items left'
                 }
             ], 422);
         }
@@ -114,9 +112,12 @@ class CartController extends Controller
             if ($cartItem) {
                 $cartItem->delete();
             }
-            return response(['count' => Cart::getCartItemsCount()]);
+
+            return response([
+                'count' => Cart::getCartItemsCount(),
+            ]);
         } else {
-            $cartItems = json_decode($request->cookie('cart_items', '[]', true));
+            $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
             foreach ($cartItems as $i => &$item) {
                 if ($item['product_id'] === $product->id) {
                     array_splice($cartItems, $i, 1);
@@ -124,31 +125,42 @@ class CartController extends Controller
                 }
             }
             Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
+
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
     }
-
 
     public function updateQuantity(Request $request, Product $product)
     {
         $quantity = (int)$request->post('quantity');
         $user = $request->user();
+
+        if ($product->quantity !== null && $product->quantity < $quantity) {
+            return response([
+                'message' => match ( $product->quantity ) {
+                    0 => 'The product is out of stock',
+                    1 => 'There is only one item left',
+                    default => 'There are only ' . $product->quantity . ' items left'
+                }
+            ], 422);
+        }
+
         if ($user) {
             CartItem::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->update(['quantity' => $quantity]);
 
             return response([
-                'count' => Cart::getCartItemsCount()
-
+                'count' => Cart::getCartItemsCount(),
             ]);
         } else {
-            $cartItems = json_decode($request->cookie('cart_items', '[]', true));
-            foreach ($cartItems as $item) {
+            $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
+            foreach ($cartItems as &$item) {
                 if ($item['product_id'] === $product->id) {
-                    $item['quantity'] += $quantity;
+                    $item['quantity'] = $quantity;
                     break;
                 }
             }
             Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
+
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
     }
