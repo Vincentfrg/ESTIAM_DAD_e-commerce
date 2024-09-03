@@ -78,7 +78,7 @@
           class="z-10 right-0 bg-slate-800 py-2">
           <li>
             <a
-              href="/src/profile.html"
+              href="{{ route('profile') }}"
               class="flex px-3 py-2 hover:bg-slate-900">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +234,7 @@
           class="absolute z-10 right-0 bg-slate-800 py-2 w-48">
           <li>
             <a
-              href="/src/profile.html"
+              href="{{ route('profile') }}"
               class="flex px-3 py-2 hover:bg-slate-900">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
