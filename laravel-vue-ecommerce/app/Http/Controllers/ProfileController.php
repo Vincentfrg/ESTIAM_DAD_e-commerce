@@ -16,9 +16,15 @@ class ProfileController extends Controller
         $user = $request->user();
         /** @var \App\Models\Customer $customer */
         $customer = $user->customer;
+
+        if (!$customer) {
+            // Si aucun client n'est trouvé, vous pouvez rediriger ou afficher un message d'erreur
+            return redirect()->back()->withErrors('No customer found for this user.');
+        }
+
         $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
         $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
-    //    dd($customer, $shippingAddress->attributesToArray(), $billingAddress, $billingAddress->customer);
+        //        dd($customer, $shippingAddress->attributesToArray(), $billingAddress, $billingAddress->customer);
         $countries = Country::query()->orderBy('name')->get();
 
         return view('profile.view', compact('customer', 'user', 'shippingAddress', 'billingAddress', 'countries'));
