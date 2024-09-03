@@ -1,7 +1,7 @@
 <header
   x-data="{
         mobileMenuOpen: false,
-        cartItemsCount: {{ App\Http\Controllers\Helpers\Cart::getCartItemsCount() }}
+        cartItemsCount: {{ App\Helpers\Cart::getCartItemsCount() }}
       }"
       @cart-change.window="cartItemsCount = $event.detail.count"
   class="flex justify-between bg-slate-800 shadow-md text-white">
@@ -131,7 +131,7 @@
                 stroke-linejoin="round"
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            Déconnexion
+            DÃ©connexion
           </button>
         </form>
       </li>
@@ -287,7 +287,7 @@
                 stroke-linejoin="round"
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            Déconnexion
+            DÃ©connexion
           </button>
         </form>
       </li>
