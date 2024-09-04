@@ -38,7 +38,7 @@
                                     <div class="flex justify-between mb-3">
                                         <h3 x-text="product.title"></h3>
                                         <span class="text-lg font-semibold">
-                                            $<span x-text="product.price"></span>
+                                            <span x-text="product.price"></span>€
                                         </span>
                                     </div>
                                     <div class="flex justify-between items-center">
@@ -67,7 +67,7 @@
                     <div class="border-t border-gray-300 pt-4">
                         <div class="flex justify-between">
                             <span class="font-semibold">Total</span>
-                            <span id="cartTotal" class="text-xl" x-text="`$${cartTotal}`"></span>
+                            <span id="cartTotal" class="text-xl" x-text="`${cartTotal}€`"></span>
                         </div>
                         <p class="text-gray-500 mb-6">
                             Les frais de port et les taxes seront calculés a l'étape du paiement.
