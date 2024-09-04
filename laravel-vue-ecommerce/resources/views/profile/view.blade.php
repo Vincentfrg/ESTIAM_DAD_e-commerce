@@ -257,7 +257,7 @@
             <div class="bg-white p-3 shadow rounded-lg">
                 <form action="{{route('profile_password.update')}}" method="post">
                     @csrf
-                    <h2 class="text-xl font-semibold mb-2">Mise à jour du mot de passe</h2>
+                    <h2 class="text-xl font-semibold mb-2">Modification du mot de passe</h2>
                     <div class="mb-3">
                         <x-input
                             type="password"
