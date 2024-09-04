@@ -1,6 +1,12 @@
 <?php
+/**
+ * User: Zura
+ * Date: 8/16/2022
+ * Time: 5:26 AM
+ */
 
 namespace App\Helpers;
+
 
 use App\Models\CartItem;
 use App\Models\Product;
@@ -23,7 +29,7 @@ class Cart
                 fn($carry, $item) => $carry + $item['quantity'],
                 0
             );
-        };
+        }
     }
 
     public static function getCartItems()
@@ -32,7 +38,7 @@ class Cart
         $user = $request->user();
         if ($user) {
             return CartItem::where('user_id', $user->id)->get()->map(
-                fn($item) => ['product-id' => $item->product_id, 'quantity' => $item->quantity]
+                fn($item) => ['product_id' => $item->product_id, 'quantity' => $item->quantity]
             );
         } else {
             return self::getCookieCartItems();
@@ -42,7 +48,7 @@ class Cart
     public static function getCookieCartItems()
     {
         $request = \request();
-        return  json_decode($request->cookie('cart_items', ['']), true);
+        return json_decode($request->cookie('cart_items', '[]'), true);
     }
 
     public static function getCountFromItems($cartItems)
@@ -68,15 +74,19 @@ class Cart
                 'user_id' => $request->user()->id,
                 'product_id' => $cartItem['product_id'],
                 'quantity' => $cartItem['quantity'],
-
             ];
+        }
 
-            if (!empty($newCartItems)) {
-                CartItem::insert($newCartItems);
-            }
+        if (!empty($newCartItems)) {
+            CartItem::insert($newCartItems);
         }
     }
 
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @author Zura Sekhniashvili <zurasekhniashvili@gmail.com>
+     */
     public static function getProductsAndCartItems(): array|\Illuminate\Database\Eloquent\Collection
     {
         $cartItems = self::getCartItems();
