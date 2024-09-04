@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AddressType;
+use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Country;
 use App\Models\CustomerAddress;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -60,9 +61,24 @@ class ProfileController extends Controller
             CustomerAddress::create($billingData);
         }
 
-        $request->session()->flash('flash_message', 'Profile was successfully updated.');
+        $request->session()->flash('flash_message', 'Le profil a été mis à jour avec succès.');
 
         return redirect()->route('profile');
 
+    }
+
+    public function passwordUpdate(PasswordUpdateRequest $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        $passwordData = $request->validated();
+
+        $user->password = Hash::make($passwordData['new_password']);
+        $user->save();
+
+        $request->session()->flash('flash_message', 'Votre mot de passe a été mis à jour avec succès.');
+
+        return redirect()->route('profile');
     }
 }
