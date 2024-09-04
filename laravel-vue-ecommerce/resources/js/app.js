@@ -61,13 +61,13 @@ document.addEventListener("alpine:init", async () => {
           .then(result => {
             this.$dispatch('cart-change', {count: result.count})
             this.$dispatch("notify", {
-              message: "The item was added into the cart",
+              message: "L'article a été ajouté au panier",
             });
           })
           .catch(response => {
             console.log(response);
             this.$dispatch('notify', {
-              message: response.message || 'Server Error. Please try again.',
+              message: response.message || 'Erreur du serveur. Veuillez réessayer.',
               type: 'error'
             })
           })
@@ -76,7 +76,7 @@ document.addEventListener("alpine:init", async () => {
         post(this.product.removeUrl)
           .then(result => {
             this.$dispatch("notify", {
-              message: "The item was removed from cart",
+              message: "L'article a été retiré du panier.",
             });
             this.$dispatch('cart-change', {count: result.count})
             this.cartItems = this.cartItems.filter(p => p.id !== product.id)
@@ -87,12 +87,12 @@ document.addEventListener("alpine:init", async () => {
           .then(result => {
             this.$dispatch('cart-change', {count: result.count})
             this.$dispatch("notify", {
-              message: "The item quantity was updated",
+              message: "La quantité de l'article a été mise à jour.",
             });
           })
           .catch(response => {
             this.$dispatch('notify', {
-              message: response.message || 'Server Error. Please try again.',
+              message: response.message || 'Erreur du serveur. Veuillez réessayer.',
               type: 'error'
             })
           })
