@@ -1,5 +1,15 @@
 <x-app-layout>
-    <div class="container mx-auto">
+    <div x-data="productItem({{
+        json_encode([
+                    'id' => $product->id,
+                    'slug' => $product->slug,
+                    'image' => $product->image ?: '/img/noimage.png',
+                    'title' => $product->title,
+                    'price' => $product->price,
+                    'quantity' => $product->quantity,
+                    'addToCartUrl' => route('cart.add', $product)
+            ]) 
+    }})" class="container mx-auto">
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
             <div class="lg:col-span-3">
                 <div x-data="{
@@ -20,8 +30,7 @@
                     init() {
                         this.activeImage = this.images.length > 0 ? this.images[0] : null
                     }
-                    }"
-                >
+                    }">
                     <div class="relative">
                         <template x-for="image in images">
                             <div
@@ -89,10 +98,12 @@
                         name="quantity"
                         x-ref="quantityEl"
                         value="1"
-                        class="w-32 focus:border-purple-500 focus:outline-none rounded" />
+                        min="1"
+                        class="w-32 focus:border-purple-500 focus:outline-none rounded"
+                    />
                 </div>
                 <button
-                    @click="addToCart(id, $refs.quantityEl.value)"
+                    @click="addToCart( $refs.quantityEl.value)"
                     class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
