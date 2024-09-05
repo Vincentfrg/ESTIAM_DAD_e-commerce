@@ -72,10 +72,12 @@
                         <p class="text-gray-500 mb-6">
                             Les frais de port et les taxes seront calculés a l'étape du paiement.
                         </p>
-
-                        <button type="submit" class="btn-primary w-full py-3 text-lg">
-                            Procédé au paiement
-                        </button>
+                        <form action="{{route('cart.checkout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn-primary w-full py-3 text-lg">
+                                Procédez au paiement
+                            </button>
+                        </form>
             </template>
             <template x-if="!cartItems.length">
                 <div class="text-center py-8 text-gray-500">

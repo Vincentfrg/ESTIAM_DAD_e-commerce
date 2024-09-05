@@ -15,6 +15,7 @@ class CartController extends Controller
     {
         [$products, $cartItems] = Cart::getProductsAndCartItems();
         $total = 0;
+
         foreach ($products as $product) {
             $total += $product->price * $cartItems[$product->id]['quantity'];
         }
@@ -53,7 +54,7 @@ class CartController extends Controller
 
         if ($product->quantity !== null && $product->quantity < $totalQuantity) {
             return response([
-                'message' => match ( $product->quantity ) {
+                'message' => match ($product->quantity) {
                     0 => 'The product is out of stock',
                     1 => 'There is only one item left',
                     default => 'There are only ' . $product->quantity . ' items left'
@@ -137,7 +138,7 @@ class CartController extends Controller
 
         if ($product->quantity !== null && $product->quantity < $quantity) {
             return response([
-                'message' => match ( $product->quantity ) {
+                'message' => match ($product->quantity) {
                     0 => 'The product is out of stock',
                     1 => 'There is only one item left',
                     default => 'There are only ' . $product->quantity . ' items left'
