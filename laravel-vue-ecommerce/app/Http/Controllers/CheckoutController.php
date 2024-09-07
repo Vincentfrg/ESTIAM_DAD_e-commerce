@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Helpers\Cart;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\Payment;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -10,13 +15,19 @@ class CheckoutController extends Controller
 {
     public function checkout(Request $request)
     {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
 
         $lineItems = [];
+        $totalPrice = 0;
         foreach ($products as $product) {
+            $quantity = $cartItems[$product->id]['quantity'];
+            $totalPrice += $product->price * $quantity;
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
@@ -26,7 +37,7 @@ class CheckoutController extends Controller
                     ],
                     'unit_amount' => $product->price * 100,
                 ],
-                'quantity' => $cartItems[$product->id]['quantity'],
+                'quantity' => $quantity,
             ];
         }
 
@@ -38,48 +49,65 @@ class CheckoutController extends Controller
             'cancel_url' => route('checkout.failure', [], true),
         ]);
 
+        $orderData = [
+            'total_price' => $totalPrice,
+            'status' => OrderStatus::Unpaid,
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ];
+
+        $order = Order::create($orderData);
+
+        $paymentData = [
+            'order_id' => $order->id,
+            'amount' => $totalPrice,
+            'status' => PaymentStatus::Pending,
+            'type' => 'cc',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+            'session_id' => $session->id,
+        ];
+
+        Payment::create($paymentData);
+
         return redirect($session->url);
     }
     public function success(Request $request)
     {
-        // $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
-
-        // // Récupération de `session_id` depuis la requête
-        // $session_id = $request->get('session_id');
-
-        // // Vérification de la présence
-        // if (!$session_id) {
-        //     abort(400, 'Session ID is required');
-        // }
-
-        // $session = $stripe->checkout->sessions->retrieve($_GET['session_id']);
-
-        // // Récupérer les informations du client associées à la session
-        // if (!empty($session->customer)) {
-        //     $customer = $stripe->customers->retrieve($session->customer);
-        // } else {
-        //     $customer = null;
-        // }
-
-        // dd($session, $customer);
-        // dd($request->all());
-
-        // return view('checkout.success', compact('customer'));
-
-
+        /** @var \App\Models\User $user */
+        $user = $request->user();
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
 
         try {
-            $session = \Stripe\Checkout\Session::retrieve($request->get('session_id'));
+            $session_id = $request->get('session_id');
+            $session = \Stripe\Checkout\Session::retrieve($session_id);
+
             if (!$session) {
-                return view('checkout.failure');
+                return view('checkout.failure', ['message' => 'ID de session invalide']);
             }
 
+            $payment = Payment::query()->where(['session_id' => $session->id, 'status' => PaymentStatus::Pending])->first();
+
+            if (!$payment) {
+                return view('checkout.failure', ['message' => 'Le paiement n\'existe pas']);
+            }
+
+            $payment->status = PaymentStatus::Paid;
+            $payment->update();
+
+            $order = $payment->order;
+
+            $order->status = OrderStatus::Paid;
+            $order->update();
+
+            // Supprimer les articles du panier après achat
+            CartItem::where(['user_id' => $user->id])->delete();
+
             $customer = \Stripe\Customer::retrieve($session->customer);
-            
+
             return view('checkout.success', compact('customer'));
-        } catch(Exception $e) {
-            return view('checkout.failure');
+        } catch (Exception $e) {
+            return view('checkout.failure', ['message' => $e->getMessage()]);
         }
     }
 

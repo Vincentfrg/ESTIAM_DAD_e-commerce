@@ -2,7 +2,7 @@
 namespace App\Enums;
 
 /**
- * Class AdressType
+ * Class AddressType
  *
  * @author @FireFox-d3vFR
  * @package App\Enum
