@@ -7,6 +7,7 @@ use App\Enums\PaymentStatus;
 use App\Helpers\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Payment;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class CheckoutController extends Controller
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
-
+        $orderItems = [];
         $lineItems = [];
         $totalPrice = 0;
         foreach ($products as $product) {
@@ -39,6 +40,11 @@ class CheckoutController extends Controller
                 ],
                 'quantity' => $quantity,
             ];
+            $orderItems[] = [
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+                'unit_price' => $product->price,
+            ];
         }
 
         $session = \Stripe\Checkout\Session::create([
@@ -49,6 +55,7 @@ class CheckoutController extends Controller
             'cancel_url' => route('checkout.failure', [], true),
         ]);
 
+        // Create Order
         $orderData = [
             'total_price' => $totalPrice,
             'status' => OrderStatus::Unpaid,
@@ -58,6 +65,13 @@ class CheckoutController extends Controller
 
         $order = Order::create($orderData);
 
+        // Create Order Items
+        foreach ($orderItems as $orderItem) {
+            $orderItem['order_id'] = $order->id;
+            OrderItem::create($orderItem);
+        }
+
+        // Create Payment
         $paymentData = [
             'order_id' => $order->id,
             'amount' => $totalPrice,
@@ -121,6 +135,34 @@ class CheckoutController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
 
+        $lineItems = [];
+        foreach ($order->items as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $item->product->title,
+                        // 'images' => [$item->product->image],
+                    ],
+                    'unit_amount' => $item->unit_price * 100,
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+
+        $session = \Stripe\Checkout\Session::create([
+            'customer_creation' => 'always',
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.failure', [], true),
+        ]);
+
+        $order->payment->session_id = $session->id;
+        $order->payment->save();
+
+        return redirect($session->url);
     }
 }

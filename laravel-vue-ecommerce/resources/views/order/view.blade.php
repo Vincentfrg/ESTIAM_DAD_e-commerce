@@ -54,7 +54,7 @@
                 <hr class="my-3"/>
             @endforeach
 
-            <!-- @if (!$order->isPaid())
+            @if (!$order->isPaid())
                 <form action="{{ route('cart.checkout-order', $order) }}"
                       method="POST">
                     @csrf
@@ -76,7 +76,7 @@
                         Make a Payment
                     </button>
                 </form>
-            @endif -->
+            @endif
         </div>
     </div>
 </x-app-layout>
