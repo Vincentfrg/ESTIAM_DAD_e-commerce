@@ -76,6 +76,15 @@ Concernant les profils créés, vous pouvez les vérifier dans les tables `users
 
 ---
 
+**Stripe**
+
+La gestion des évênements d'achat se fait par l'utilisation du package `Stripe`. Pour manipuler les `webhooks`, il faut installer `Stripe CLI`. Dans un terminal, accéder au chemin du répertoire du `.exe` et lancer ces commandes suivantes :
+
+- `stripe.exe listen --forward-to 127.0.0.1:8000/webhook/stripe` : Cela va ouvrir un onglet de connexion avec une validation par mail. Après vérification, l'authentification sera validé et vous aurez accès au `CLI`. Transférer les événements vers votre destination
+- Dans un autre terminal `stripe.exe trigger payment_intent.succeeded` : Cela va déclencher des événements avec la CLI (*voir dans la première fenêtre*).
+
+---
+
 **Des Questions ? Contactez-moi !**
 
 <p align="center">

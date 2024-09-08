@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use Exception;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckoutController extends Controller
 {
@@ -103,23 +104,23 @@ class CheckoutController extends Controller
                 return view('checkout.failure', ['message' => 'ID de session invalide']);
             }
 
-            $payment = Payment::query()->where(['session_id' => $session->id, 'status' => PaymentStatus::Pending])->first();
+            $payment = Payment::query()
+                ->where(['session_id' => $session_id])
+                ->whereIn('status', [PaymentStatus::Pending, PaymentStatus::Paid])
+                ->first();
 
             if (!$payment) {
-                return view('checkout.failure', ['message' => 'Le paiement n\'existe pas']);
+                throw new NotFoundHttpException();
             }
 
-            $payment->status = PaymentStatus::Paid;
-            $payment->update();
-
-            $order = $payment->order;
-
-            $order->status = OrderStatus::Paid;
-            $order->update();
+            if ($payment->status === PaymentStatus::Pending) {
+                $this->updateOrderAndSession($payment);
+            }
 
             $customer = \Stripe\Customer::retrieve($session->customer);
-
             return view('checkout.success', compact('customer'));
+        } catch (NotFoundHttpException $e) {
+            throw $e;
         } catch (Exception $e) {
             return view('checkout.failure', ['message' => $e->getMessage()]);
         }
@@ -141,7 +142,6 @@ class CheckoutController extends Controller
                     'currency' => 'eur',
                     'product_data' => [
                         'name' => $item->product->title,
-                        // 'images' => [$item->product->image],
                     ],
                     'unit_amount' => $item->unit_price * 100,
                 ],
@@ -167,7 +167,7 @@ class CheckoutController extends Controller
 
     public function webhook()
     {
-        
+
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
 
         $endpoint_secret = 'whsec_cc62a8e7e0c0b38fbffb47db126730673710b475dbfc224b4d0bc8ea72a3d4df';
@@ -178,7 +178,9 @@ class CheckoutController extends Controller
 
         try {
             $event = \Stripe\Webhook::constructEvent(
-                $payload, $sig_header, $endpoint_secret
+                $payload,
+                $sig_header,
+                $endpoint_secret
             );
         } catch (\UnexpectedValueException $e) {
             // invalid payload
@@ -190,13 +192,35 @@ class CheckoutController extends Controller
 
         // handle the event
         switch ($event->type) {
-            case 'payment_intent.succeeded':
+            case 'checkout.session.completed':
                 $paymentIntent = $event->data->object;
-            // ... handle other event types
+                $sessionId = $paymentIntent['id'];
+
+                $payment = Payment::query()
+                    ->where(['session_id' => $sessionId, 'status' => PaymentStatus::Pending])
+                    ->first();
+
+                if ($payment) {
+                    $this->updateOrderAndSession($payment);
+                }
+
+                // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
 
         return response('', 200);
+    }
+
+    private function updateOrderAndSession(Payment $payment)
+    {
+
+        $payment->status = PaymentStatus::Paid;
+        $payment->update();
+
+        $order = $payment->order;
+
+        $order->status = OrderStatus::Paid;
+        $order->update();
     }
 }
