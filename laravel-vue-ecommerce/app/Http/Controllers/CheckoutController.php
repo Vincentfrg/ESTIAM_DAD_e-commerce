@@ -84,6 +84,9 @@ class CheckoutController extends Controller
 
         Payment::create($paymentData);
 
+        // Supprimer les articles du panier après achat
+        CartItem::where(['user_id' => $user->id])->delete();
+
         return redirect($session->url);
     }
     public function success(Request $request)
@@ -114,9 +117,6 @@ class CheckoutController extends Controller
             $order->status = OrderStatus::Paid;
             $order->update();
 
-            // Supprimer les articles du panier après achat
-            CartItem::where(['user_id' => $user->id])->delete();
-
             $customer = \Stripe\Customer::retrieve($session->customer);
 
             return view('checkout.success', compact('customer'));
@@ -132,8 +132,7 @@ class CheckoutController extends Controller
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        /** @var \App\Models\User $user */
-        $user = $request->user();
+        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
 
         $lineItems = [];
         foreach ($order->items as $item) {
@@ -150,7 +149,7 @@ class CheckoutController extends Controller
             ];
         }
 
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+
 
         $session = \Stripe\Checkout\Session::create([
             'customer_creation' => 'always',
@@ -164,5 +163,40 @@ class CheckoutController extends Controller
         $order->payment->save();
 
         return redirect($session->url);
+    }
+
+    public function webhook()
+    {
+        
+        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+
+        $endpoint_secret = 'whsec_cc62a8e7e0c0b38fbffb47db126730673710b475dbfc224b4d0bc8ea72a3d4df';
+
+        $payload = @file_get_contents('php://input');
+        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+        $event = null;
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload, $sig_header, $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            // invalid payload
+            return response('', 401);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // invalid signature
+            return response('', 402);
+        }
+
+        // handle the event
+        switch ($event->type) {
+            case 'payment_intent.succeeded':
+                $paymentIntent = $event->data->object;
+            // ... handle other event types
+            default:
+                echo 'Received unknown event type ' . $event->type;
+        }
+
+        return response('', 200);
     }
 }

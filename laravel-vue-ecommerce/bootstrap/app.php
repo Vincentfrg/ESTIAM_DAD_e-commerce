@@ -21,7 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\Admin::class,
             'guestOrVerified' => \App\Http\Middleware\GuestOrVerified::class,
         ]);
-        //
+
+        $middleware->validateCsrfTokens(
+            except: ['webhook/stripe']
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
