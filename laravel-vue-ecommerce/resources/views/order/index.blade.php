@@ -37,7 +37,7 @@
                             >
                         </td>
                         <td class="py-1 px-2">{{$order->total_price}}€</td>
-                        <td class="py-1 px-2 whitespace-nowrap">{{$order->items_count}} item(s)</td>
+                        <td class="py-1 px-2 whitespace-nowrap">{{$order->items()->count()}} article(s)</td>
                         <td class="py-1 px-2 flex gap-2 w-[100px]">
                             @if (!$order->isPaid())
                                 <form action="{{ route('cart.checkout-order', $order) }}"
@@ -60,7 +60,7 @@
                                                 d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
                                             />
                                         </svg>
-                                        Pay
+                                        Payer
                                     </button>
                                 </form>
                             @endif
