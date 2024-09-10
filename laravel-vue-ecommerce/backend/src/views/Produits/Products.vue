@@ -8,14 +8,14 @@
             Ajouter un nouveau Produit
         </button>
     </div>
-    <ProduitModel v-model="showModal" :product="productModel" @close="onModalClose"/>
-    <ProduitsTableau @clickEdit="editProduct"/>
+    <ProductModel v-model="showModal" :product="productModel" @close="onModalClose"/>
+    <ProductTable @clickEdit="editProduct"/>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import ProduitModel from './ProduitModel.vue';
-import ProduitsTableau from './ProduitsTableau.vue';
+import ProductModel from './ProductModel.vue';
+import ProductTable from './ProductTable.vue';
 import store from '../../store/index.js';
 
 const DEFAULT_EMPTY_OBJECT = {

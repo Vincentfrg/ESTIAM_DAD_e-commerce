@@ -4,9 +4,10 @@ import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
 import RequestPassword from "../views/RequestPasswordReset.vue";
 import ResetPassword from "../views/ResetPassword.vue";
-import Produits from "../views/Produits/Produits.vue";
-import Utilisateurs from "../views/Utilisateurs.vue";
-import Rapports from "../views/Rapports.vue";
+import Products from "../views/Produits/Products.vue";
+import Orders from "../views/Commandes/Orders.vue";
+import Users from "../views/Users.vue";
+import Reports from "../views/Reports.vue";
 import store from "../store";
 import NotFound from "../views/NotFound.vue";
 
@@ -26,18 +27,23 @@ const routes = [
             },
             {
                 path: "produits",
-                name: "app.produits",
-                component: Produits,
+                name: "app.products",
+                component: Products,
             },
             {
                 path: "utilisateurs",
-                name: "app.utilisateurs",
-                component: Utilisateurs,
+                name: "app.users",
+                component: Users,
             },
             {
                 path: "rapports",
-                name: "app.rapports",
-                component: Rapports,
+                name: "app.reports",
+                component: Reports,
+            },
+            {
+                path: "commandes",
+                name: "app.orders",
+                component: Orders,
             },
         ]
     },

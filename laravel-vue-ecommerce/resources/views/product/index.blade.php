@@ -18,7 +18,7 @@
             <a href="{{ route('product.view', $product->slug) }}" class="block overflow-hidden aspect-w-3 aspect-h-2">
                 <img
                     src="{{ $product->image }}"
-                    alt=""
+                    alt="{{ $product->title }}"
                     class="rounded-lg hover:scale-105 hover:rotate-1 transition-transform object-cover" />
             </a>
             <div class="p-4">
