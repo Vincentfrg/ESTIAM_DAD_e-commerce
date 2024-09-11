@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => $this->created_at,
+            'created_at' => (new \DateTime($this->created_at))->format('d-m-Y'),
         ];
     }
 }

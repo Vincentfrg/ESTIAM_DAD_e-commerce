@@ -1,6 +1,6 @@
 import axiosClient from "../axios";
 
-export function getUser({ commit }, data) {
+export function getCurrentUser({ commit }, data) {
     return axiosClient.get("/user", data)
     .then(({ data }) => {
         commit("setUser", data);
@@ -23,15 +23,18 @@ export function logout({ commit }) {
     });
 }
 
+/** Part - Products */
+
 export function getProducts({commit}, {url = null, search = '', perPage = 10, sort_field, sort_direction} = {}) {
     commit('setProducts', [true])
     url = url || '/products';
+    // const params = {
+    //     per_page: state.products.limit,
+    // }
     return axiosClient.get(url, {
         params: {
-            search,
-            per_page: perPage,
-            sort_field,
-            sort_direction
+            // ...params,
+            search, perPage, sort_field, sort_direction
         }
     })
         .then(res => {
@@ -77,4 +80,30 @@ export function updateProduct({commit}, product) {
 
 export function deleteProduct({commit}, id) {
     return axiosClient.delete(`/products/${id}`)
+}
+
+/** Part - Users */
+
+export function getUser({}, id) {
+    return axiosClient.get(`/users/${id}`);
+}
+
+export function getUsers({commit}, {url = null, search = '', perPage = 10, sort_field, sort_direction} = {}) {
+    commit('setUsers', [true])
+    url = url || '/users';
+    // const params = {
+    //     per_page: state.users.limit,
+    // }
+    return axiosClient.get(url, {
+        params: {
+            // ...params,
+            search, perPage, sort_field, sort_direction
+        }
+    })
+        .then(res => {
+            commit('setUsers', [false, res.data])
+        })
+        .catch(() => {
+            commit('setUsers', [false])
+        })
 }

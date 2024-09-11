@@ -23,7 +23,7 @@
                 <tr>
                     <TableauHeaderCell @click="sortOrder('id')" class="border-b-2 p-2 text-left" field="id"
                         :sort-field="sortField" :sort-direction="sortDirection">ID</TableauHeaderCell>
-                    <TableauHeaderCell class="border-b-2 p-2 text-left" field="status" :sort-field="sortField" 
+                    <TableauHeaderCell class="border-b-2 p-2 text-left" field="status" :sort-field="sortField"
                         :sort-direction="sortDirection" @click="sortOrder('status')">Status</TableauHeaderCell>
                     <TableauHeaderCell @click="sortOrder('created_at')" class="border-b-2 p-2 text-left" field="created_at"
                         :sort-field="sortField" :sort-direction="sortDirection">Date</TableauHeaderCell>
@@ -146,14 +146,14 @@
 import { ref, computed, onMounted } from "vue";
 import store from "../../store/index.js";
 import Spinner from '../../components/core/Spinner.vue';
-import { PRODUITS_PAR_PAGE } from '../../constants.js';
+import { PRODUCTS_PER_PAGE } from '../../constants.js';
 import TableauHeaderCell from '../../components/core/Tableau/TableauHeaderCell.vue';
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
 
 
-const perPage = ref(PRODUITS_PAR_PAGE);
+const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref('');
 const orders = computed(() => store.state.orders);
 const sortField = ref('updated_at');
@@ -207,7 +207,7 @@ function deleteOrder(Order) {
     store.dispatch('deleteOrder', Order.id)
         .then(res => {
             // TODO Show notification
-            store.dispatch('getOrders'); 
+            store.dispatch('getOrders');
         })
 }
 

@@ -6,7 +6,7 @@ import RequestPassword from "../views/RequestPasswordReset.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import Products from "../views/Produits/Products.vue";
 import Orders from "../views/Commandes/Orders.vue";
-import Users from "../views/Users.vue";
+import Users from "../views/Utilisateurs/Users.vue";
 import Reports from "../views/Reports.vue";
 import store from "../store";
 import NotFound from "../views/NotFound.vue";
